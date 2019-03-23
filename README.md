@@ -1,2 +1,0 @@
-# CryptoDash
-Created with CodeSandbox
