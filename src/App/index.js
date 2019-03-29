@@ -1,5 +1,5 @@
 import React from 'react';
-import Welcome from './WelcomeMessage';
+import Settings from '../Settings/';
 import AppLayout from './AppLayout';
 import AppBar from './AppBar';
 import { AppProvider } from './AppProvider';
@@ -11,7 +11,7 @@ function App() {
     <AppLayout>
       <AppProvider>
         <AppBar />
-        <Welcome />
+        <Settings />
       </AppProvider>
     </AppLayout>
   );
