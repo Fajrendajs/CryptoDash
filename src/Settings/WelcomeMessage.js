@@ -10,7 +10,7 @@ export default function Welcome() {
             Welcome to CryptoDash, please select your favorite coins to begin
           </div>
         ) : (
-          <h1>test</h1>
+          <h1>Favorites</h1>
         )
       }
     </AppContext.Consumer>
