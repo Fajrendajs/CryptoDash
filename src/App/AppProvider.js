@@ -1,7 +1,7 @@
-import React from 'react';
-import _ from 'lodash';
+import React from "react";
+import _ from "lodash";
 
-const cc = require('cryptocompare');
+const cc = require("cryptocompare");
 
 const MAX_FAVORITES = 10;
 
@@ -11,15 +11,16 @@ export class AppProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 'dashboard',
-      favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
+      page: "dashboard",
+      favorites: ["BTC", "ETH", "XMR", "DOGE"],
       ...this.savedSettings(),
       setPage: this.setPage,
       addCoin: this.addCoin,
       removeCoin: this.removeCoin,
       isInfavorites: this.isInfavorites,
       setFilteredCoins: this.setFilteredCoins,
-      confirmFavorites: this.confirmFavorites
+      confirmFavorites: this.confirmFavorites,
+      setCurrentFavorite: this.setCurrentFavorite
     };
   }
 
@@ -49,19 +50,31 @@ export class AppProvider extends React.Component {
   };
 
   confirmFavorites = () => {
-    console.log('hello');
+    let currentFavorite = this.state.favorites[0];
     this.setState(
       {
         firstVisit: false,
-        page: 'dashboard'
+        page: "dashboard",
+        currentFavorite
       },
       () => {
         this.fetchPrices();
       }
     );
     localStorage.setItem(
-      'crypthoDash',
-      JSON.stringify({ favorites: this.state.favorites })
+      "crypthoDash",
+      JSON.stringify({ favorites: this.state.favorites, currentFavorite })
+    );
+  };
+
+  setCurrentFavorite = sym => {
+    this.setState({ currentFavorite: sym });
+    localStorage.setItem(
+      "crypthoDash",
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem("crypthoDash")),
+        currentFavorite: sym
+      })
     );
   };
 
@@ -70,7 +83,7 @@ export class AppProvider extends React.Component {
   fetchPrices = async () => {
     if (this.state.firstVisit) return;
     let prices = await this.prices();
-    console.log(prices);
+
     this.setState({ prices });
   };
 
@@ -78,22 +91,22 @@ export class AppProvider extends React.Component {
     let returnData = [];
     for (let i = 0; i < this.state.favorites.length; i++) {
       try {
-        let priceData = await cc.priceFull(this.state.favorites[i], 'USD');
+        let priceData = await cc.priceFull(this.state.favorites[i], "USD");
         returnData.push(priceData);
       } catch (e) {
-        console.warn('fetch price error: ', e);
+        console.warn("fetch price error: ", e);
       }
     }
     return returnData;
   };
 
   savedSettings() {
-    let crypthoDashData = JSON.parse(localStorage.getItem('crypthoDash'));
+    let crypthoDashData = JSON.parse(localStorage.getItem("crypthoDash"));
     if (!crypthoDashData) {
-      return { page: 'settings', firstVisit: true };
+      return { page: "settings", firstVisit: true };
     }
-    let { favorites } = crypthoDashData;
-    return { favorites };
+    let { favorites, currentFavorite } = crypthoDashData;
+    return { favorites, currentFavorite };
   }
 
   setFilteredCoins = filteredCoins => this.setState({ filteredCoins });
