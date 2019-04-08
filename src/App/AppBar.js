@@ -1,6 +1,6 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { AppContext } from './AppProvider';
+import React from "react";
+import styled, { css } from "styled-components";
+import { AppContext } from "./AppProvider";
 
 const Logo = styled.div`
   font-size: 1.5em;
@@ -17,13 +17,23 @@ const ControlButtonElem = styled.div`
     css`
       text-shadow: 0px 0px 60px #03ff03;
     `}
+
+  ${props =>
+    props.hidden &&
+    css`
+      display: none;
+    `}
 `;
 
 function ControlButton({ name, active }) {
   return (
     <AppContext.Consumer>
-      {({ page, setPage }) => (
-        <ControlButtonElem onClick={() => setPage(name)} active={page === name}>
+      {({ firstVisit, page, setPage }) => (
+        <ControlButtonElem
+          hiden={firstVisit && name === "dashboard"}
+          onClick={() => setPage(name)}
+          active={page === name}
+        >
           {toProperCase(name)}
         </ControlButtonElem>
       )}
