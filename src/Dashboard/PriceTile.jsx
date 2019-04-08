@@ -30,6 +30,25 @@ const numberFormat = number => {
   return +(number + "").slice(0, 7);
 };
 
+export const PriceTileStyled = styled(SelectableTile)`
+  ${props =>
+    props.compact &&
+    css`
+      display: grid;
+      ${fontSize3}
+      grid-gap: 5px;
+      grid-template-columns: repeat(3, 1fr);
+      justify-items: right;
+    `}
+
+  ${props =>
+    props.currentFavorite &&
+    css`
+      pointer-events: none;
+      ${greenBoxShadow}
+    `}
+`;
+
 function ChangePercent({ data }) {
   return (
     <JustifyRight>
@@ -70,25 +89,6 @@ function PriceTileCompact({ sym, data, currentFavorite, setCurrentFavorite }) {
     </PriceTileStyled>
   );
 }
-
-export const PriceTileStyled = styled(SelectableTile)`
-  ${props =>
-    props.compact &&
-    css`
-      display: grid;
-      ${fontSize3}
-      grid-gap: 5px;
-      grid-template-columns: repeat(3, 1fr);
-      justify-items: right;
-    `}
-
-  ${props =>
-    props.currentFavorite &&
-    css`
-      pointer-events: none;
-      ${greenBoxShadow}
-    `}
-`;
 
 export default function({ price, index }) {
   let sym = Object.keys(price)[0];
